@@ -67,7 +67,7 @@ export default class NetworkRunner {
         timeStamp('Finding delegators...')
         addresses = await this.getDelegations().then(delegations => {
           return delegations.map(delegation => {
-            if (delegation.balance.amount === 0) return
+            if (!delegation || delegation.balance.amount === 0) return
 
             return delegation.delegation.delegator_address
           })
@@ -118,14 +118,18 @@ export default class NetworkRunner {
     let timeout = this.opts.delegationsTimeout
     let pageSize = this.opts.batchPageSize
     let allGrants
-    try {
-      allGrants = await this.queryClient.getGranteeGrants(botAddress, { timeout, pageSize }, (pages) => {
-        timeStamp("...batch", pages.length)
-        return this.throttleQuery()
-      })
-    } catch (e) { }
+
     let grantCalls = addresses.map(item => {
       return async () => {
+
+        try {
+          allGrants = await this.queryClient.getGranteeGrants(botAddress, item, { timeout, pageSize }, (pages) => {
+            timeStamp("...batch getGranteeGrants", pages.length)
+            return this.throttleQuery()
+          })
+        } catch (e) { }
+
+
         if (allGrants) return this.parseGrantResponse(allGrants, botAddress, item, address)
         try {
           return await this.getGrants(item)
@@ -135,7 +139,8 @@ export default class NetworkRunner {
       }
     })
     let grantedAddresses = await mapSync(grantCalls, this.opts.batchQueries, (batch, index) => {
-      timeStamp('...batch', index + 1)
+      timeStamp('...batch grantedAddresses', index + 1)
+
       return this.throttleQuery()
     })
     return _.compact(grantedAddresses.flat())

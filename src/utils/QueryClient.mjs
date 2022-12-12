@@ -25,7 +25,7 @@ const QueryClient = async (chainId, restUrls, opts) => {
     const searchParams = new URLSearchParams();
     if (opts.status) searchParams.append("status", opts.status);
     if (pageSize) searchParams.append("pagination.limit", pageSize);
-    if (nextKey) searchParams.append("pagination.key", nextKey);
+    if (nextKey) searchParams.append("pagination.key", nextKey.slice(0, -8));
     return axios
       .get(
         restUrl +
@@ -44,18 +44,30 @@ const QueryClient = async (chainId, restUrls, opts) => {
     opts,
     pageCallback
   ) => {
-    return getAllPages((nextKey) => {
-      return getValidatorDelegations(validatorAddress, pageSize, opts, nextKey);
+    return getAllPages((nextKey, offset) => {
+      return getValidatorDelegations(validatorAddress, pageSize, opts, nextKey, offset);
     }, pageCallback).then((pages) => {
-      return pages.map((el) => el.delegation_responses).flat();
+      return _.compact(pages.map((el) => el.delegation_responses).flat());
     });
   };
 
-  const getValidatorDelegations = (validatorAddress, pageSize, opts, nextKey) => {
+  const getValidatorDelegations = (validatorAddress, pageSize, opts, nextKey, offset) => {
     const searchParams = new URLSearchParams();
     if (pageSize) searchParams.append("pagination.limit", pageSize);
-    if (nextKey) searchParams.append("pagination.key", nextKey);
-
+    // if (nextKey) searchParams.append("pagination.key", nextKey);
+    if (offset) searchParams.append("pagination.offset", offset * pageSize);
+    
+    // for (const key of searchParams.keys()) {
+    //   console.log(key)
+    //   console.log(searchParams.get(key))    
+    // }
+    // console.log("encodeURI: " + encodeURI(nextKey))
+    // console.log("encodeURIComponent: " + encodeURIComponent(nextKey))
+    // console.log("decodeURI: " + decodeURI(nextKey))
+    // console.log("decodeURIComponent: " + decodeURIComponent(nextKey))
+    // const searchParamsForce = nextKey ? 
+    //   "pagination.limit=" + searchParams.get("pagination.limit") + "&pagination.key=" + searchParams.get("pagination.key") :
+    //   "pagination.limit=" + encodeURIComponent(searchParams.get("pagination.limit"))
     return axios
       .get(
         restUrl +
@@ -67,7 +79,6 @@ const QueryClient = async (chainId, restUrls, opts) => {
       )
       .then((res) => res.data);
   };
-
   const getBalance = (address, denom, opts) => {
     return axios
       .get(restUrl + "/cosmos/bank/v1beta1/balances/" + address, opts)
@@ -122,7 +133,7 @@ const QueryClient = async (chainId, restUrls, opts) => {
     return getAllPages((nextKey) => {
       const searchParams = new URLSearchParams();
       searchParams.append("pagination.limit", pageSize || 100);
-      if (nextKey) searchParams.append("pagination.key", nextKey);
+      if (nextKey) searchParams.append("pagination.key", nextKey.slice(0, -8));
 
       return axios
         .get(restUrl + "/cosmos/gov/v1beta1/proposals?" +
@@ -145,15 +156,16 @@ const QueryClient = async (chainId, restUrls, opts) => {
       .then((res) => res.data)
   };
 
-  const getGranteeGrants = (grantee, opts, pageCallback) => {
+  const getGranteeGrants = (grantee, granter, opts, pageCallback) => {
     const { pageSize } = opts || {}
-    return getAllPages((nextKey) => {
+    return getAllPages((nextKey, offSet) => {
       const searchParams = new URLSearchParams();
       searchParams.append("pagination.limit", pageSize || 100);
-      if (nextKey) searchParams.append("pagination.key", nextKey);
+      // if (nextKey) searchParams.append("pagination.key", nextKey.slice(0, -8));
+      if (offset) searchParams.append("pagination.offset", offset * pageSize);
 
       return axios
-        .get(restUrl + "/cosmos/authz/v1beta1/grants/grantee/" + grantee + "?" +
+        .get(restUrl + "/cosmos/authz/v1beta1/grants?grantee=" + grantee + "&granter=" + granter +
           searchParams.toString(), opts)
         .then((res) => res.data)
     }, pageCallback).then((pages) => {
@@ -163,10 +175,11 @@ const QueryClient = async (chainId, restUrls, opts) => {
 
   const getGranterGrants = (granter, opts, pageCallback) => {
     const { pageSize } = opts || {}
-    return getAllPages((nextKey) => {
+    return getAllPages((nextKey, offSet) => {
       const searchParams = new URLSearchParams();
       searchParams.append("pagination.limit", pageSize || 100);
-      if (nextKey) searchParams.append("pagination.key", nextKey);
+      // if (nextKey) searchParams.append("pagination.key", nextKey.slice(0, -8));
+      if (offset) searchParams.append("pagination.offset", offset * pageSize);
 
       return axios
         .get(restUrl + "/cosmos/authz/v1beta1/grants/granter/" + granter + "?" +
@@ -220,9 +233,10 @@ const QueryClient = async (chainId, restUrls, opts) => {
     let pages = [];
     let nextKey, error;
     do {
-      const result = await getPage(nextKey);
+      const result = await getPage(nextKey, pages.length);
       pages.push(result);
       nextKey = result.pagination?.next_key;
+      // console.log("while", nextKey, atob(nextKey), btoa(nextKey), result, result.pagination?.next_key)
       if (pageCallback) await pageCallback(pages);
     } while (nextKey);
     return pages;
