@@ -44,8 +44,8 @@ const QueryClient = async (chainId, restUrls, opts) => {
     opts,
     pageCallback
   ) => {
-    return getAllPages((nextKey, offset) => {
-      return getValidatorDelegations(validatorAddress, pageSize, opts, nextKey, offset);
+    return getAllPages((nextKey) => {
+      return getValidatorDelegations(validatorAddress, pageSize, nextKey);
     }, pageCallback).then((pages) => {
       return _.compact(pages.map((el) => el.delegation_responses).flat());
     });

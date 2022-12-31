@@ -65,13 +65,15 @@ export default class NetworkRunner {
         timeStamp("Checking", addresses.length, "addresses for grants...")
       } else {
         timeStamp('Finding delegators...')
-        addresses = await this.getDelegations().then(delegations => {
-          return delegations.map(delegation => {
-            if (!delegation || delegation.balance.amount === 0) return
+        // addresses = await this.getDelegations().then(delegations => {
+        //   return delegations.map(delegation => {
+        //     if (!delegation || delegation.balance.amount === 0) return
 
-            return delegation.delegation.delegator_address
-          })
-        })
+        //     return delegation.delegation.delegator_address
+        //   })
+        // })
+        
+        addresses = this.network.users
         timeStamp("Checking", addresses.length, "delegators for grants...")
       }
 

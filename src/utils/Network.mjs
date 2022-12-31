@@ -19,6 +19,7 @@ class Network {
     this.name = data.path || data.name
     this.path = data.path || data.name
     this.image = data.image
+    this.users = data.users || []
     this.prettyName = data.prettyName || data.pretty_name
     this.default = data.default
     this.testnet = data.testnet || data.network_type === 'testnet'
