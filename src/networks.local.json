@@ -1,0 +1,34 @@
+{
+  "terra": {
+    "prettyName": "Terra Classic",
+    "restUrl": [
+      "https://columbus-lcd.terra.dev/"
+    ],
+    "usersInLastBlock": "11108108(columbus-5)",
+    "users": [
+      "terra14mls5ztyj75xe7c9rdf40dfyv02prasumd6g3t",
+      "terra1zgu5w9ddpdt5ft36qn8cags0h8rz2uswr95p98",
+      "terra199g8kqd685768uaw8czp9p79w7639vhftewvmq",
+      "terra1jnx4e67vt2xszw302pl8p449ed04svlvnu0uhj",
+      "terra138kl96v6e0hu3mnjx9an2u0ajfe2xaungtw8al",
+      "terra1308ax7vwgazyg87ad2968dyvhtjzrumjq6yth9",
+      "terra1mm5cmdcz7zdlskyu9sy4dya02q0nuyf40f5zl4",
+      "terra1dg55utuc0u0kghmjlyqwxsgy0xhcwwwqwhvhw8",
+      "terra164j3uk5kkdgc2sayte3cww3qha6u0nktfe99u8",
+      "terra1r6ls4sfatn4yhl7ce0lr5mwz3jn74965df9a99"
+    ],
+    "gasPrice": "28.325uluna",
+    "autostake": {
+      "correctSlip44": false,
+      "slip44": 330,
+      "retries": 3,
+      "batchPageSize": 20,
+      "batchQueries": 20,
+      "batchTxs": 50,
+      "delegationsTimeout": 60000,
+      "queryTimeout": 10000,
+      "queryThrottle": 100,
+      "gasModifier": 1.1
+    }
+  }
+}
