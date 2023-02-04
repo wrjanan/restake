@@ -4,7 +4,7 @@
     "restUrl": [
       "https://columbus-lcd.terra.dev/"
     ],
-    "usersInLastBlock": "11108108(columbus-5)",
+    "usersInLastBlock": "11339070(columbus-5)",
     "users": [
       "terra14mls5ztyj75xe7c9rdf40dfyv02prasumd6g3t",
       "terra1zgu5w9ddpdt5ft36qn8cags0h8rz2uswr95p98",
@@ -15,7 +15,9 @@
       "terra1mm5cmdcz7zdlskyu9sy4dya02q0nuyf40f5zl4",
       "terra1dg55utuc0u0kghmjlyqwxsgy0xhcwwwqwhvhw8",
       "terra164j3uk5kkdgc2sayte3cww3qha6u0nktfe99u8",
-      "terra1r6ls4sfatn4yhl7ce0lr5mwz3jn74965df9a99"
+      "terra1r6ls4sfatn4yhl7ce0lr5mwz3jn74965df9a99",
+      "terra1zsux3uyz5twzsuygwyt4acpm6m0lv0qm0a8naj",
+      "terra10dv4jwvuz4wjx2l4qr2ar0aapkw6zxqy77afa7"
     ],
     "gasPrice": "28.325uluna",
     "autostake": {
