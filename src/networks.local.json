@@ -2,7 +2,7 @@
   "terra": {
     "prettyName": "Terra Classic",
     "restUrl": [
-      "https://columbus-lcd.terra.dev/"
+      "http://127.0.0.1:1317/"
     ],
     "usersInLastBlock": "12111054(columbus-5)",
     "users": [

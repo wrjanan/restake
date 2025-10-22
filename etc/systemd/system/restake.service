@@ -1,0 +1,13 @@
+[Unit]
+Description=restake service with docker compose
+Requires=docker.service
+After=docker.service
+Wants=restake.timer
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/lunapunks/restake
+ExecStart=/usr/bin/docker-compose run --rm app npm run autostake
+
+[Install]
+WantedBy=multi-user.target

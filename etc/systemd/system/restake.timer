@@ -1,0 +1,9 @@
+[Unit]
+Description=Restake bot timer
+
+[Timer]
+AccuracySec=1min
+OnCalendar=*-*-* 04:20:00
+
+[Install]
+WantedBy=timers.target
